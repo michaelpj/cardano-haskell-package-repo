@@ -8,18 +8,23 @@ function usage {
   echo
   echo "        -r REVISION     adds .0.0.0.0.REVISION to the package version"
   echo "        -v VERSION      uses VERSION as the package version"
+  echo "        -o              overrride (dangerous, breaks history)"
   exit
 }
 
-optstring=":hr:v:"
+optstring=":hor:v:"
 
 REVISION=
 VERSION=
+OVERRIDE=0
 
 while getopts ${optstring} arg; do
   case ${arg} in
     h)
       usage
+      ;;
+    o)
+      OVERRIDE=1
       ;;
     r)
       REVISION="${OPTARG}"
@@ -37,6 +42,17 @@ while getopts ${optstring} arg; do
       ;;
   esac
 done
+
+if [[ "$OVERRIDE" -eq 1 ]];
+then
+  read -p "WARNING: OVERRIDE IS SET and will break version history. Are you sure you want to continue?" -n 1 -r
+  echo
+  if [[ ! $REPLY =~ ^[Yy]$ ]]
+  then
+      exit 1
+  fi
+
+fi
 
 if [[ -n $VERSION && -n $REVISION ]]; then
   echo "You can either use -r or -v but not both at the same time"
@@ -120,6 +136,9 @@ do_package() {
   fi
 
   local METAFILE="_sources/$PKG_NAME/$PKG_VERSION/meta.toml"
+  if [[ -f "$METAFILE" && "$OVERRIDE" -eq 1 ]]; then
+    rm -f "$METAFILE"
+  fi
   if [[ -f $METAFILE ]]; then
     warning "$METAFILE already exists! you can only publish new versions of a package"
     if [[ -z $SUBDIR ]]; then
