@@ -144,7 +144,7 @@ jobs:
 
       - name: Build a smoke-test package
         run: |
-          nix build .#hydraJobs.${{matrix.ghc}}.plutus-core-1-1-1-0.x86_64_linux --override-input CHaP path:_repo
+          nix build .#hydraJobs.${{matrix.ghc}}.plutus-core-1-1-1-0.x86_64-linux --override-input CHaP path:_repo
 
   deploy-check:
     runs-on: ubuntu-latest
