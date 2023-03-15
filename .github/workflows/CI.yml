@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0 # the check script below needs the whole history
 
       - name: Setup Nix
-        uses: cachix/install-nix-action@v17
+        uses: cachix/install-nix-action@v20
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
@@ -35,7 +35,7 @@ jobs:
 
     steps:
       - name: Setup Nix
-        uses: cachix/install-nix-action@v17
+        uses: cachix/install-nix-action@v20
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
@@ -119,7 +119,7 @@ jobs:
 
     steps:
       - name: Install Nix
-        uses: cachix/install-nix-action@v17
+        uses: cachix/install-nix-action@v20
         with:
           nix_path: nixpkgs=channel:nixos-unstable
           extra_nix_config: |
