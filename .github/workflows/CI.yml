@@ -46,9 +46,6 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: main
-
-      - name: Compute old package list
-        run: ./scripts/list-packages.sh > old-packages
              
       - uses: actions/cache@v3
         with:
@@ -144,7 +141,7 @@ jobs:
 
       - name: Build a smoke-test package
         run: |
-          nix build --accept-flake-config --override-input CHaP path:_repo --eval-store auto --store ssh-ng://eu.nixbuild.net .#hydraJobs.${{matrix.ghc}}.plutus-core-1-1-1-0.x86_64-linux  
+          nix build --accept-flake-config -L --override-input CHaP path:_repo --eval-store auto --store ssh-ng://eu.nixbuild.net .#hydraJobs.${{matrix.ghc}}.plutus-core-1-1-1-0.x86_64-linux  
 
   deploy-check:
     runs-on: ubuntu-latest
