@@ -3,10 +3,11 @@
 set -o errexit
 set -o pipefail
 
+SCRIPT_DIR=$(dirname "$(which "$0")")
 # Use gnu-tar and gnu-date regardless of whether the OS is Linux
 # or BSD-based.  The correct command will be assigned to TAR and DATE
 # variables.
-source "$(dirname "$(which "$0")")/use-gnu-tar.sh"
+source "$SCRIPT_DIR/use-gnu-tar.sh"
 
 function usage {
   echo "Usage $(basename "$0") [-r REVISION] [-v VERSION] REPO_URL REV [SUBDIRS...]"
@@ -136,7 +137,7 @@ do_package() {
   fi
 
   mkdir -p "$(dirname "$METAFILE")"
-  render_meta "$TIMESTAMP" "$REPO_URL" "$REPO_REV" "$SUBDIR" "$REVISION$VERSION" > "$METAFILE"
+  render_meta "$TIMESTAMP" "$REPO_URL" "$REPO_REV" "$SUBDIR" "$VERSION" > "$METAFILE"
   log "Written $METAFILE"
 
   git add "$METAFILE"
@@ -144,7 +145,7 @@ do_package() {
 }
 
 TAR_URL="$REPO_URL/tarball/$REPO_REV"
-TIMESTAMP=$("$DATE" --utc +%Y-%m-%dT%H:%M:%SZ)
+TIMESTAMP=$($SCRIPT_DIR/current-timestamp.sh)
 
 WORKDIR=$(mktemp -d)
 log "Work directory is $WORKDIR"
