@@ -45,8 +45,8 @@
             inherit system;
             inherit (haskell-nix) config;
             overlays = [
-              haskell-nix.overlay
               iohk-nix.overlays.crypto
+              haskell-nix.overlay
             ];
           };
           inherit (pkgs) lib;
